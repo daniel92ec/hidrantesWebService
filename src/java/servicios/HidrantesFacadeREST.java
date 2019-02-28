@@ -5,6 +5,8 @@
  */
 package servicios;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,8 +26,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.primefaces.json.JSONArray;
-import org.primefaces.json.JSONObject;
+
 
 /**
  *
@@ -65,7 +66,8 @@ public class HidrantesFacadeREST extends AbstractFacade<Hidrantes> {
     @Produces({"application/json;charset=utf-8"})
     public Response registrar(@QueryParam("latitud") String latitud,@QueryParam("longitud") String longitud) throws JSONException, Exception {
       
-       JSONArray jsonArray= new JSONArray();
+       
+        JsonArray jsonArray= new JsonArray();
             
         String respuesta = "";
         String obs = "";
@@ -77,15 +79,16 @@ public class HidrantesFacadeREST extends AbstractFacade<Hidrantes> {
         
         for (Hidrantes h : listaHidrantes){
                  
-            if ( distance(Double.valueOf(latitud), h.getLatitud().doubleValue(), Double.valueOf(longitud), h.getLongitud().doubleValue())< 350){
+            if ( distance(Double.valueOf(latitud), h.getLatitud().doubleValue(), Double.valueOf(longitud), h.getLongitud().doubleValue())< 300){
                 listaHidrantesCercanos.add(h);
-                JSONObject aux=new JSONObject();
-                aux.put("id", h.getId());
-                aux.put("longitude", h.getLongitud());
-                aux.put("latitude", h.getLatitud());
-                aux.put("description", h.getInterseccion());
-                aux.put("name", h.getPrincipal());
-                 jsonArray.put(aux);
+                JsonObject aux=new JsonObject();
+                aux.addProperty("id", h.getId());
+                aux.addProperty("longitude", h.getLongitud());
+                aux.addProperty("latitude", h.getLatitud());
+                aux.addProperty("description", h.getInterseccion());
+                aux.addProperty("name", h.getPrincipal());
+                //jsonArray.addProperty(aux);
+                jsonArray.add(aux);
             }
         }
         System.out.println(listaHidrantesCercanos);
